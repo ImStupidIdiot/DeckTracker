@@ -24,4 +24,4 @@ yarn-error.log*
 
 venv/
 
-/api/venv
+/api/venv/

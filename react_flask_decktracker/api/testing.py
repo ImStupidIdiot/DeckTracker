@@ -4,6 +4,8 @@ import json
 from flask import *
 from flask_cors import CORS
 import time
+from yarl import URL
+import aiohttp
 
 app = Flask(__name__)
 
@@ -64,8 +66,8 @@ async def testing(uid):
         replay_dict['opponents']['opp_total_wins'] = 0
         replay_dict['opponents']['opp_total_games'] = 0
 
-    if not uid in replay_dict.keys():
-        replay_dict[uid] = {}
+    # if not uid in replay_dict.keys():
+    #     replay_dict[uid] = {}
 
     lineup_1 = str(lineup_1)
     lineup_2 = str(lineup_2)
@@ -90,7 +92,7 @@ async def testing(uid):
         replay_dict['last_played_games' + str(uid)][0] = replay_dict['last_played_games' + str(uid)][1]
         replay_dict['last_played_games' + str(uid)][1] = str(data['replays'][1]['match_time'])
 
-    if not str(data['replays'][0]['match_time']) in replay_dict['last_played_games' + str(uid)]  and (data['replays'][1]['match_type'] == 'Co-Op Mode' or data['replays'][1]['match_type'] == 'Matching Mode'):
+    if not str(data['replays'][0]['match_time']) in replay_dict['last_played_games' + str(uid)]  and (data['replays'][1]['match_type'] == 'Co-Op Mode' or data['replays'][1]['match_type'] == 'Matching Mode'  or data['replays'][1]['match_type'] == 'Teammate Invitation'):
         if not lineup_1 in replay_dict.keys():
             replay_dict[lineup_1] = {'wins': 0, 'total_games': 0}
         if not opponent_lineup_1 in replay_dict['opponents'].keys():
@@ -181,3 +183,8 @@ link_translator = {
     'https://act.hoyoverse.com/hk4e/e20200928calculate/item_char_icon_u38a6e/e97234cb2eaab032b0eb2d1041739d7c.png' : 'Dehya',
     'https://act.hoyoverse.com/hk4e/e20200928calculate/item_char_icon_u38a6e/20bf81d83529af1bea25043e2ece8ba2.png' : 'Yaoyao'
 }
+async def test():
+    async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()).request("GET","https://bbs-api-os.hoyolab.com/game_record/genshin/api/gcg/basicinfo", cookies={'cookie_token_v2': 'v2_CAQSDGM5b3FhcTNzM2d1OCDKsOOoBii9hLyzAzDctN6tAUILYmJzX292ZXJzZWE=', 'account_mid_v2': '12ekf22ko5_hy', 'account_id_v2': '364354140', 'ltoken_v2': 'v2_CAISDGM5b3FhcTNzM2d1OCDKsOOoBiiIqZTqAzDctN6tAUILYmJzX292ZXJzZWE=', 'ltmid_v2': '12ekf22ko5_hy', 'ltuid_v2': '364354140'}) as response:
+        return
+    
+asyncio.run(test())

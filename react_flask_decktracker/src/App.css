@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.roundedSearch {
+  margin-left: 5px;
+  width: 1000px;
+  font-size: 40px;
+  border-radius: 5px;
+}

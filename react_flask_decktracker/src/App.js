@@ -3,11 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import ReactDOM from "react-dom";
 
-
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { total_games: 0, total_wins: 0, uids: ['809458646', '859401792', '812310683', '878964522', '622963441', '860236862', '606415530', '624516438', '612358049', '649486104', '646346491', '626398278', '704822600', '819042492', '603200036'], mounted: false};
+    this.state = { total_games: 0, total_wins: 0, uids: ['809458646', '859401792', '812310683', '878964522', '622963441', '860236862', '606415530', '624516438', '612358049', '649486104', '646346491', '626398278', '704822600', '819042492', '603200036', '827155991'], mounted: false};
   }
 
   async componentDidMount() {
@@ -16,7 +15,7 @@ class App extends React.Component {
       this.setState({mounted: true}); 
       while(true) {
         for (let i = 0; i < this.state.uids.length; i++) {
-          const response = await fetch('http://localhost:5000/testing/' + this.state.uids[i]);
+          const response = await fetch('/testing/' + this.state.uids[i]);
           // for testing later: 646346491
           const json = await response.json();
           this.setState({total_games: json.total_games, total_wins: json.total_wins});
@@ -42,6 +41,7 @@ class App extends React.Component {
 
 
   render() {
+    console.log('update');
     var build = "";
     var buildList = [];
     for (var key in this.state) {
@@ -55,8 +55,9 @@ class App extends React.Component {
         build += tuple[0] + ': ' + tuple[1] + '% over ' + tuple[2] + ' games';
         build += '\n    '; 
     }
-    return <pre><h1> Currently Tracking UIDS: {this.state.uids.toString()} <br/> Total Games: {this.state.total_games} <br/> Total Wins: {this.state.total_wins} <br/> Winrate: {this.state.total_wins / this.state.total_games * 100}% <br/> Winrate by Deck: <br/>    {build}
-    </h1></pre>;
+    return <><pre><h1> Currently Tracking UIDS: {this.state.uids.toString()} <br /> Total Games: {this.state.total_games} <br /> Total Wins: {this.state.total_wins}   !!! Note: Total Games and Total Wins probably not accurate right now bc i accidentally wiped them in the database once and i'm too lazy to count <br /> Winrate: {this.state.total_wins / this.state.total_games * 100}% <br /> Winrate by Deck: <br />    {build}
+    </h1></pre><input className='roundedSearch' type="text" id="searchBarChar" name="searchBarChar" placeholder="Input" onChange={this.props.search}></input>
+</>;
   }
 
   // useEffect(() => {
